@@ -1,0 +1,98 @@
+/* styles.css */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navbar {
+    background-color: #28a745;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-brand {
+    color: #fff !important;
+    font-weight: bold;
+  }
+  
+  .navbar-nav .nav-link {
+    color: #fff !important;
+  }
+  
+  .container {
+    margin-top: 20px;
+  }
+  
+  #map {
+    width: 100%;
+    height: 500px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-top: 15px;
+  }
+  
+  .partner-list {
+    margin-top: 30px;
+  }
+  
+  .partner-list h2 {
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+  
+  .partner-list ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .partner-list li {
+    background: #ffffff;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    transition: background 0.3s;
+  }
+  
+  .partner-list li:hover {
+    background: #e9fbe7;
+  }
+  
+  #filters label {
+    margin-right: 15px;
+    font-weight: 500;
+  }
+  
+  .form-control {
+    margin-bottom: 15px;
+  }
+  
+  footer {
+    background-color: #343a40;
+    color: #fff;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: 40px;
+  }
+  
+  @media (max-width: 768px) {
+    #map {
+      height: 400px;
+    }
+  
+    .form-inline {
+      flex-direction: column;
+    }
+  
+    .form-inline .form-control {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  
+    .navbar-nav {
+      text-align: center;
+    }
+  }
+  

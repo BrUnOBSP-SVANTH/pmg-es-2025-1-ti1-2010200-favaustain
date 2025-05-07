@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapa de Empresas de Energia Sustentável</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+</head>
+
+<body>
+  <header class="container-fluid py-3 border-bottom d-flex justify-content-between align-items-center">
+    <h1 class="fs-4 text-success">Mapa de empresas de energia sustentável</h1>
+    <div class="d-flex gap-2">
+      <img src="logo1.png" alt="Logo 1" class="logo">
+      <img src="logo2.png" alt="Logo 2" class="logo">
+      <img src="logo3.png" alt="Logo 3" class="logo">
+    </div>
+  </header>
+
+  <main class="container py-4">
+    <div class="row mb-3">
+      <div class="col-md-8">
+        <input type="text" id="searchInput" class="form-control" placeholder="Buscar empresa ou localização...">
+      </div>
+      <div class="col-md-4">
+        <select id="filterType" class="form-select">
+          <option value="">Filtrar por tipo</option>
+          <option value="solar">Energia Solar</option>
+          <option value="eolica">Energia Eólica</option>
+          <option value="consultoria">Consultoria</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-8">
+        <div id="map" style="height: 500px;" class="rounded border"></div>
+      </div>
+      <div class="col-lg-4">
+        <h5>Parceiros próximos</h5>
+        <ul id="partnerList" class="list-group">
+          <!-- Lista preenchida via JS -->
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
+  <script>
+    const empresas = [
+      { nome: "Eco Minas", tipo: "solar", lat: -19.883, lng: -43.933 },
+      { nome: "Suntech Solar", tipo: "solar", lat: -19.920, lng: -43.945 },
+      { nome: "Seg Energy BH", tipo: "consultoria", lat: -19.910, lng: -43.920 },
+      // Adicione mais empresas conforme necessário
+    ];
+
+    const map = L.map('map').setView([-19.915, -43.935], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const markers = L.markerClusterGroup();
+
+    empresas.forEach(emp => {
+      const marker = L.marker([emp.lat, emp.lng])
+        .bindPopup(`<strong>${emp.nome}</strong><br>Tipo: ${emp.tipo}`);
+      marker.tipo = emp.tipo;
+      marker.nome = emp.nome;
+      markers.addLayer(marker);
+    });
+
+    map.addLayer(markers);
+
+    document.getElementById('searchInput').addEventListener('input', function () {
+      const termo = this.value.toLowerCase();
+      markers.clearLayers();
+      empresas.forEach(emp => {
+        if (emp.nome.toLowerCase().includes(termo)) {
+          const marker = L.marker([emp.lat, emp.lng])
+            .bindPopup(`<strong>${emp.nome}</strong><br>Tipo: ${emp.tipo}`);
+          marker.tipo = emp.tipo;
+          marker.nome = emp.nome;
+          markers.addLayer(marker);
+        }
+      });
+    });
+
+    document.getElementById('filterType').addEventListener('change', function () {
+      const tipo = this.value;
+      markers.clearLayers();
+      empresas.forEach(emp => {
+        if (tipo === '' || emp.tipo === tipo) {
+          const marker = L.marker([emp.lat, emp.lng])
+            .bindPopup(`<strong>${emp.nome}</strong><br>Tipo: ${emp.tipo}`);
+          marker.tipo = emp.tipo;
+          marker.nome = emp.nome;
+          markers.addLayer(marker);
+        }
+      });
+    });
+
+    // Lista de parceiros na lateral
+    const lista = document.getElementById('partnerList');
+    empresas.forEach(emp => {
+      const li = document.createElement('li');
+      li.className = 'list-group-item';
+      li.textContent = emp.nome;
+      lista.appendChild(li);
+    });
+
+    // Roteamento opcional entre pontos
+    L.Routing.control({
+      waypoints: [
+        L.latLng(-19.920, -43.945),
+        L.latLng(-19.910, -43.920)
+      ],
+      routeWhileDragging: true
+    }).addTo(map);
+  </script>
+</body>
+
+</html>
+
